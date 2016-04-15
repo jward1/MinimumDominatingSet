@@ -1,0 +1,6 @@
+*.csv
+*.class
+*.txt
+*.zip
+writeups/
+data/
