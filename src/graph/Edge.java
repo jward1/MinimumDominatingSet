@@ -11,7 +11,7 @@ public class Edge
 {
 	private Node v1;
 	private Node v2;
-	private boolean isCovered; 
+	private int isCovered; 
 
 	public Edge (Node node1, Node node2)
 	{	
@@ -25,7 +25,7 @@ public class Edge
 
 		this.v1 = val1;
 		this.v2 = val2;
-		this.isCovered = false;
+		this.isCovered = -1;
 	}
 
 	// Use for direct graphs
@@ -66,8 +66,14 @@ public class Edge
 		return false;
 	}
 
-	public boolean isCovered() { return this.isCovered; }
+	public int isCovered() { return this.isCovered; }
 
-	public void setIsCovered(boolean newState) { this.isCovered = newState; }
+	public void setIsCovered(int newState) 
+	{ 
+		if (newState == -1 || newState == 0 || newState == 1)
+			this.isCovered = newState;
+		else
+			throw new IllegalArgumentException("isCovered must be set to -1, 0, or 1.");
+	}
 
 }

@@ -137,12 +137,10 @@ public class Graph
     public void resetGraph()
     {
         for (Node node : nodes.values() )
-            if (node.isCovered())
-                node.setIsCovered(false);
+            node.setIsCovered(-1);
 
         for (Edge edge : edges)
-            if (edge.isCovered() )
-                edge.setIsCovered(false);
+        	edge.setIsCovered(-1);
         
         return;
     }

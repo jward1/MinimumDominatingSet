@@ -80,10 +80,10 @@ public class DominatingSet
     {
 		int numUncovered = 0;
 
-		if (!candidate.isCovered()) { numUncovered++; }
+		if (candidate.isCovered() != 1) { numUncovered++; }
 
 		for (Node neighbor : candidate.getNeighbors() )
-			if (!neighbor.isCovered() ) {	numUncovered++; }
+			if ( neighbor.isCovered() != 1 ) {	numUncovered++; }
 
 		return numUncovered;
     }
@@ -96,17 +96,17 @@ public class DominatingSet
     {   
         int numUpdated = 0;
 
-    	if (!node.isCovered() )  
+    	if ( node.isCovered() != 1 )  
     	{
-    		node.setIsCovered(true);
+    		node.setIsCovered(1);
     		numUpdated++;
     	}
         
         for (Node neighbor : node.getNeighbors() )
         {
-            if (!neighbor.isCovered() ) 
+            if ( neighbor.isCovered() != 1 ) 
             {
-                neighbor.setIsCovered(true);
+                neighbor.setIsCovered(1);
                 numUpdated++;
             }
         }

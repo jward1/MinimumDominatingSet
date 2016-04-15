@@ -13,13 +13,13 @@ public class Node
 {
 	private int name;
 	private HashSet<Edge> nodesEdges;
-	private boolean isCovered;
+	private int isCovered;
 
 	public Node(int name)
 	{
 		this.name = name;
 		this.nodesEdges = new HashSet<Edge>();
-		this.isCovered = false;
+		this.isCovered = -1;
 	}
 
 	public int getName() { return this.name; }
@@ -35,9 +35,15 @@ public class Node
 
 	public HashSet<Edge> getEdges() { return this.nodesEdges; }
 	
-	public boolean isCovered() { return this.isCovered; }
+	public int isCovered() { return this.isCovered; }
 
-	public void setIsCovered(boolean newState) { this.isCovered = newState; }
+	public void setIsCovered(int newState) 
+	{ 
+		if (newState == -1 || newState == 0 || newState == 1)
+			this.isCovered = newState;
+		else
+			throw new IllegalArgumentException("isCovered must be set to -1, 0, or 1.");
+	}
 
 	public void addEdge(Edge newEdge) 
 	{ 

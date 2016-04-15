@@ -13,11 +13,11 @@ public class App
 		System.out.println("Running tests ...");
 		tests();
 
-		Graph testEnron = new Graph();
-		tools.GraphLoader.loadGraph(testEnron, "data/email-Enron.txt");
+		// Graph testEnron = new Graph();
+		// tools.GraphLoader.loadGraph(testEnron, "data/email-Enron.txt");
 		
-        System.out.println("Undirected Enron graph has " + testEnron.getNumNodes() + " nodes.");
-        System.out.println("Undirected Enron graph has " + testEnron.getNumEdges() + " edges.");
+        // System.out.println("Undirected Enron graph has " + testEnron.getNumNodes() + " nodes.");
+        // System.out.println("Undirected Enron graph has " + testEnron.getNumEdges() + " edges.");
 
 		// long start = System.currentTimeMillis();
 		// LinkedList<Integer> enronDominatingSet = testEnron.findGreedyDominatingSet();
@@ -43,10 +43,14 @@ public class App
         System.out.println(dominatingSet1a);
 
         List<Node> takeTwoVertexCover1 = VertexCover.takeTwoApproximation(test1);
-        System.out.print("Vertex Cover: ");
+        System.out.print("Vertex Cover with take two approximation: ");
         System.out.println(takeTwoVertexCover1);
 
+        List<Node> treeVertexCover1 = VertexCover.smartTree(test1);
+        System.out.print("Vertex Cover with search tree: ");
+        System.out.println(treeVertexCover1);
 
+        
         // TEST 2
         System.out.println("\n\nTest 2: ... ");
 		Graph test2 = new Graph();
@@ -58,8 +62,12 @@ public class App
 		System.out.println(dominatingSet2);
 
 		List<Node> takeTwoVertexCover2 = VertexCover.takeTwoApproximation(test2);
-        System.out.print("Vertex Cover: ");
+        System.out.print("Vertex Cover with take two approximation: ");
         System.out.println(takeTwoVertexCover2);
+
+        List<Node> treeVertexCover2 = VertexCover.smartTree(test2);
+        System.out.print("Vertex Cover with search tree: ");
+        System.out.println(treeVertexCover2);
 
 
 		// TEST 3
@@ -73,7 +81,11 @@ public class App
 		System.out.println(dominatingSet3);
 
 		List<Node> takeTwoVertexCover3 = VertexCover.takeTwoApproximation(test3);
-        System.out.print("Vertex Cover: ");
+        System.out.print("Vertex Cover with take two approximation: ");
         System.out.println(takeTwoVertexCover3);
+
+        List<Node> treeVertexCover3 = VertexCover.smartTree(test3);
+        System.out.print("Vertex Cover with search tree: ");
+        System.out.println(treeVertexCover3);
 	}
 }
