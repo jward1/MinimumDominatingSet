@@ -2,7 +2,7 @@
 
 import graph.Graph;
 import graph.Node;
-import graph.DominatingSet;
+import algorithms.DominatingSet;
 import tools.GraphLoader;
 
 import java.util.List;
