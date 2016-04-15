@@ -4,7 +4,7 @@
  */
 package graph;
 
-import tools.RandomGraph;
+//import tools.RandomGraph;
 
 import java.io.File;
 import java.util.Scanner;
@@ -22,6 +22,8 @@ public class Graph
 	private HashSet<Edge> edges;			// The edges of the Graph; not sure if this is useful
 	private int numNodesCovered;			// The number of Nodes marked as 'covered'; 
 											// used to search for Dominating Set.
+    private int numEdgesCovered;            // The number of Edges marked as 'covered';
+                                            // used to search for Vertex Cover.
 
 	/** 
 	 * Creates a new Graph object.
@@ -31,6 +33,7 @@ public class Graph
 		nodes = new HashMap<Integer, Node>();
 		edges = new HashSet<Edge>();
 		numNodesCovered = 0;
+        numEdgesCovered = 0;
 	}
 
 
@@ -50,26 +53,32 @@ public class Graph
 
 	
 	/** 
-	 *Adds an edge to the graph.
-	 * @param from The name of the Node at which the edge starts
-	 * @param to The name of the Node at which the edge ends 
+	 *Adds an undirected edge to the graph.
+	 * @param v1 The name of the Node at one end of the edge
+	 * @param v2 The name of the Node at the other end of the edge
 	 */
-	public void addEdge(int from, int to)
+	public void addEdge(int v1, int v2)
 	{	
 		// ensure that the from and to nodes are in the Graph; add them if not
-		if (!nodes.containsKey(from))	addNode(from);
-		if (!nodes.containsKey(to)) 	addNode(to);
+		if (!nodes.containsKey(v1))	addNode(v1);
+		if (!nodes.containsKey(v2)) addNode(v2);
 		
 		// extract Node objects from Graph and construct new Edge object
-		Node fromNode = nodes.get(from);
-		Node toNode = nodes.get(to);
-		Edge newEdge = new Edge(fromNode, toNode);
+		Node node1 = nodes.get(v1);
+		Node node2 = nodes.get(v2);
+		Edge newEdge = new Edge(node1, node2);
+
+        // do not add new edge if already contained in graph
+        for (Edge edge : node1.getEdges() )
+        {
+            if (edge.isEqualTo(newEdge)) { return; }
+        }
 
 		// if Edge is not in the Graph; add it
-		if (!edges.contains(newEdge))	edges.add(newEdge);
-		fromNode.addEdge(newEdge); 			// add outgoing Edge to from Node 
-		toNode.addIncomingEdge(fromNode); 	// keep track of where Edges come from 
-											// (used for preprocessing Dominating Set)
+        edges.add(newEdge);
+        node1.addEdge(newEdge);
+        node2.addEdge(newEdge);
+        
 	}
 
 
@@ -81,20 +90,20 @@ public class Graph
 	{	return new ArrayList<Node>(nodes.values());	}
 
 
+    /** 
+     * Returns the total number of nodes in the Graph
+     * @return An int representing the number of nodes in the Graph
+     */
+    public int getNumNodes()
+    {   return nodes.size(); }
+
+
 	/** 
 	 * Returns the total number of edges in the Graph
 	 * @return An int representing the number of edges in the Graph
 	 */
     public int getNumEdges()
     {	return edges.size(); }
-
-
-    /** 
-     * Returns the total number of nodes in the Graph
-     * @return An int representing the number of nodes in the Graph
-     */
-    public int getNumNodes()
-    {	return nodes.size(); }
 
 
 	/** 
@@ -113,7 +122,7 @@ public class Graph
             
             for (Edge edge : node.getEdges())
             {
-            	s += " " + edge.toString();
+            	s += " " + (edge.getOtherNode(node)).toString();
             }
             s += " ]";
         }
@@ -138,65 +147,14 @@ public class Graph
      *
      * @return A LinkedList of Integers representing the nodes included in the dominating set.
      */
-    public LinkedList<Integer> findGreedyDominatingSet()
-    { 
-    	if ( getNumNodes() < 33 ) 	{ return findGreedyDominatingSet(false); }
-    	else						{ return findGreedyDominatingSet(true);  }
-    }
-
-
-    /**
-     * Returns a list of the Nodes that are included in the Dominating Set after preprocessing
-     * the Graph. 
-     * This method is used in the RandomGraph class in to test algorithm implementations. Users 
-     * are encouraged to use the findGreedyDominatingSet() method in the Graph class.
-     * @return A LinkedList of Integers representing the nodes included in the dominating set.
-     */
-    public LinkedList<Integer> testFindGreedyDominatingSetWithPreprocessing()
-    { return findGreedyDominatingSet(true); }
-
-
-    /**
-     * Returns a list of the Nodes that are included in the Dominating Set withou preprocessing
-     * the Graph. 
-     * This method is used in the RandomGraph class in to test algorithm implementations. Users 
-     * are encouraged to use the findGreedyDominatingSet() method in the Graph class.
-     * @return A LinkedList of Integers representing the nodes included in the dominating set.
-     */
-    public LinkedList<Integer> testFindGreedyDominatingSetWithoutPreprocessing()
-    { return findGreedyDominatingSet(false); }
-
-    /**
-     * Resets all Nodes in graph to uncovered.
-     */
-    public void resetGraph()
-    {
-    	for (Node node : nodes.values() )
-    	{
-    		node.setIsCovered(false);
-    		numNodesCovered--;
-    	}
-    	return;
-    }
-
-
-    /**
-     * Implements the findGreedyDominatingSet algorithm above.
-     * @param preprocess A boolean indicating whether the Graph should be preprocessed.
-     * @return A LinkedList of Integers representing the nodes included in the dominating set.
-     */
-    private LinkedList<Integer> findGreedyDominatingSet(boolean preprocess)
+    private List<Integer> findGreedyDominatingSet()
     {
     	// keep track of number of nodes and number of uncovered nodes
     	int numNodes = nodes.size();
 
     	// number of nodes visited, e.g., added to dominating set
-    	LinkedList<Integer> visited = new LinkedList<Integer>();
-    	LinkedList<Integer> cannotBePartOfSet = new LinkedList<Integer>();
-
-    	// find Nodes that must be included in Dominating Set (e.g., nodes with only outgoing
-    	// edges or nodes with only one incoming edge and no outgoing edges)
-    	if (preprocess) { proprocessGraph(visited); }
+    	List<Integer> visited = new ArrayList<Integer>();
+    	List<Integer> cannotBePartOfSet = new ArrayList<Integer>();
 
     	// make sure all nodes become covered
     	while (numNodesCovered != numNodes )
@@ -256,51 +214,6 @@ public class Graph
 
 
     /**
-     * Finds nodes that must be included in the dominating set.
-     * Nodes could that must be included in the dominating set must meet one of the 
-     * following three conditions:
-     *		1) 	Node has zero outgoing edges and only one incoming edge; therefore, the
-	 *		neighbor from which the incoming edge originates must be in the dominating set
-	 *		2)	Node has zero incoming edges and one or more outgoing edges; therefore, the only
-	 *			way of this node to see a message is if it sends the message
-	 *		3)	Node has zero neighbors (i.e., no incoming or outgoing edges)
-	 * This method runs in O(|V|+|E|) in the worst case and O(|V|) in the best case.
-	 * @param The LinkedList of visited nodes.	
-     */
-    private void proprocessGraph(LinkedList<Integer> visitedInPreprocess)
-    {	
- 
-    	for (Node node : nodes.values() )
-    	{	
-    		Node nodeToCover = null;
-
-    		// case 1: node only has one incoming edge; therefore the other edge must be in cover
-    		if (node.getNumOutgoingEdges() == 0 && node.getNumIncomingEdges() == 1)
-    		{
-    			HashSet<Node> neighbors = node.getIncomingEdges();
-    			// NOTE! Only one node will be in neighbors; need to find better way of extracting node
-    			for (Node neighbor : neighbors)
-    				nodeToCover = neighbor;
-    		}
-    		// case 2: node only has outgoing edges and therefore must be included in set
-    		else if (node.getNumOutgoingEdges() > 0 && node.getNumIncomingEdges() == 0)
-	    		nodeToCover = node;
-    		// case 3: node does not have any neighbors and therefore must be in set
-    		else if (node.getNumOutgoingEdges() == 0 && node.getNumIncomingEdges() == 0)
-	    		nodeToCover = node;
-
-    		if (nodeToCover != null && !visitedInPreprocess.contains(nodeToCover.getName() ) ) 
-	    	{
-		    	updateCover(nodeToCover) ; 
-				coverNodesNeighbors(nodeToCover);
-				visitedInPreprocess.add(nodeToCover.getName());
-	    	}
-    	}
-    	return;
-    }
-
-
-    /**
      *
      */
     private void coverNodesNeighbors(Node node)
@@ -325,88 +238,79 @@ public class Graph
 
 
     /**
+     * Resets all Nodes and Edges in graph to uncovered.
+     */
+    public void resetGraph()
+    {
+        for (Node node : nodes.values() )
+        {
+            if (node.isCovered())
+            {
+                node.setIsCovered(false);
+                numNodesCovered--;    
+            }
+            
+        }
+
+        for (Edge edge : edges)
+        {
+            if (edge.isCovered() )
+            {
+                edge.setIsCovered(false);
+                numEdgesCovered--;
+            }
+        }
+        return;
+    }
+
+
+    /**
      * Tests the methods of this class.
      */
     public static void tests()
     {
-    	System.out.println("\n\nTest 1a: Create graph with 6 vertices; run Greedy Algo.");
-    	Graph r1 = RandomGraph.getRandomGraph(6, 4);
-    	System.out.println(r1.exportGraphString());
-    	LinkedList<Integer> ds1a = r1.testFindGreedyDominatingSetWithoutPreprocessing();
-    	System.out.print("Dominating Set: ");
-		System.out.println(ds1a);
 
-		r1.resetGraph();
+		System.out.println("\n\nTest 1: ...");
+        Graph test1 = new Graph();
+        tools.GraphLoader.loadGraph(test1, "data/small_test_graph.txt");
+        System.out.println(test1.exportGraphString());
+        List<Integer> dominatingSet1 = test1.findGreedyDominatingSet();
+        System.out.print("Dominating Set: ");
+        System.out.println(dominatingSet1);
 
-		System.out.println("\n\nTest 1b: Create graph with 6 vertices; run Greedy Algo.");
-    	LinkedList<Integer> ds1b = r1.testFindGreedyDominatingSetWithPreprocessing();
-    	System.out.print("Dominating Set: ");
-		System.out.println(ds1b);
-
-		System.out.println("\n\nTest 2: Create random graph with 20 vertices; run Greedy Algo");
-		Graph r2 = RandomGraph.getRandomGraph(20, 5);
-		System.out.println(r2.exportGraphString());
-		LinkedList<Integer> ds2 = r2.testFindGreedyDominatingSetWithoutPreprocessing() ;
-		System.out.print("Dominating Set: ");
-		System.out.println(ds2);
-
-		System.out.println("\n\nTest 3a: ... ");
-		Graph test3a = new Graph();
-		tools.GraphLoader.loadGraph(test3a, "data/dominating_set_test_2.txt");
-		System.out.println(test3a.exportGraphString());
-		LinkedList<Integer> dominatingSet3a = test3a.findGreedyDominatingSet();
-		System.out.print("Dominating Set: ");
-		System.out.println(dominatingSet3a);
-
-		System.out.println("\n\nTest 3b: ...");
-		Graph test3b = new Graph();
-		tools.GraphLoader.loadGraph(test3b, "data/dominating_set_test_2.txt");
-		System.out.println(test3b.exportGraphString());
-		LinkedList<Integer> dominatingSet3b = test3b.findGreedyDominatingSet();
-		System.out.print("Dominating Set with Preprocessing: ");
-		System.out.println(dominatingSet3b);
-
-		System.out.println("\n\nTest 4a: ...");
-		Graph test4a = new Graph();
-		tools.GraphLoader.loadGraph(test4a, "data/small_test_graph.txt");
-		System.out.println(test4a.exportGraphString());
-		LinkedList<Integer> dominatingSet4a = test4a.findGreedyDominatingSet();
-		System.out.print("Dominating Set: ");
-		System.out.println(dominatingSet4a);
-
-		System.out.println("\n\nTest 4b: ...");
-		Graph test4b = new Graph();
-		tools.GraphLoader.loadGraph(test4b, "data/small_test_graph.txt");
-		System.out.println(test4b.exportGraphString());
-		LinkedList<Integer> dominatingSet4b = test4b.findGreedyDominatingSet();
-		System.out.print("Dominating Set: ");
-		System.out.println(dominatingSet4b);
-
-		System.out.println("\n\nTest 5: ...");
+        System.out.println("\n\nTest 2: ... ");
 		Graph test2 = new Graph();
 		tools.GraphLoader.loadGraph(test2, "data/dominating_set_test.txt");
 		System.out.println(test2.exportGraphString());
-		LinkedList<Integer> dominatingSet2 = test2.findGreedyDominatingSet();
+		List<Integer> dominatingSet2 = test2.findGreedyDominatingSet();
 		System.out.print("Dominating Set: ");
 		System.out.println(dominatingSet2);
+
+		System.out.println("\n\nTest 3: ...");
+		Graph test3 = new Graph();
+		tools.GraphLoader.loadGraph(test3, "data/dominating_set_test_2.txt");
+		System.out.println(test3.exportGraphString());
+		List<Integer> dominatingSet3 = test3.findGreedyDominatingSet();
+		System.out.print("Dominating Set: ");
+		System.out.println(dominatingSet3);
     }
 
 
 	public static void main(String[] args)
 	{
-		// tests();
+		tests();
 
-		Graph testEnron = new Graph();
-		tools.GraphLoader.loadGraph(testEnron, "data/email-Enron.txt");
+		// Graph testEnron = new Graph();
+		// tools.GraphLoader.loadGraph(testEnron, "data/email-Enron.txt");
 		
-		long start = System.currentTimeMillis();
-		LinkedList<Integer> enronDominatingSet = testEnron.findGreedyDominatingSet();
-		long end = System.currentTimeMillis();
+		// long start = System.currentTimeMillis();
+		// LinkedList<Integer> enronDominatingSet = testEnron.findGreedyDominatingSet();
+		// long end = System.currentTimeMillis();
 
-		double seconds = end/1000.0 - start/1000.0;
-		System.out.println("The program found a dominating set in " + seconds + " seconds.");
-		System.out.println("The dominating set found is ...");
-		System.out.println(enronDominatingSet);
+		// double seconds = end/1000.0 - start/1000.0;
+		// System.out.println("The program found a dominating set in " + seconds + " seconds.");
+		// System.out.println("The dominating set found is ...");
+		// System.out.println(enronDominatingSet);
 	}
 
 }
