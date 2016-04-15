@@ -20,10 +20,6 @@ public class Graph
 {
 	private HashMap<Integer, Node> nodes;	// The nodes of the Graph
 	private HashSet<Edge> edges;			// The edges of the Graph; not sure if this is useful
-	private int numNodesCovered;			// The number of Nodes marked as 'covered'; 
-											// used to search for Dominating Set.
-    private int numEdgesCovered;            // The number of Edges marked as 'covered';
-                                            // used to search for Vertex Cover.
 
 	/** 
 	 * Creates a new Graph object.
@@ -32,8 +28,6 @@ public class Graph
 	{
 		nodes = new HashMap<Integer, Node>();
 		edges = new HashSet<Edge>();
-		numNodesCovered = 0;
-        numEdgesCovered = 0;
 	}
 
 
@@ -100,6 +94,12 @@ public class Graph
     {   return nodes.size(); }
 
 
+    /**
+     *
+     */
+    public List<Edge> getEdges()
+    {	return new ArrayList<Edge>(edges); }
+
 	/** 
 	 * Returns the total number of edges in the Graph
 	 * @return An int representing the number of edges in the Graph
@@ -137,23 +137,13 @@ public class Graph
     public void resetGraph()
     {
         for (Node node : nodes.values() )
-        {
             if (node.isCovered())
-            {
                 node.setIsCovered(false);
-                numNodesCovered--;    
-            }
-            
-        }
 
         for (Edge edge : edges)
-        {
             if (edge.isCovered() )
-            {
                 edge.setIsCovered(false);
-                numEdgesCovered--;
-            }
-        }
+        
         return;
     }
 

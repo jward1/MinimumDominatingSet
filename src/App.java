@@ -1,8 +1,7 @@
 
 
-import graph.Graph;
-import graph.Node;
-import algorithms.DominatingSet;
+import graph.*;
+import algorithms.*;
 import tools.GraphLoader;
 
 import java.util.List;
@@ -43,6 +42,10 @@ public class App
         System.out.print("Dominating Set: ");
         System.out.println(dominatingSet1a);
 
+        List<Node> takeTwoVertexCover1 = VertexCover.takeTwoApproximation(test1);
+        System.out.print("Vertex Cover: ");
+        System.out.println(takeTwoVertexCover1);
+
 
         // TEST 2
         System.out.println("\n\nTest 2: ... ");
@@ -54,6 +57,10 @@ public class App
 		System.out.print("Dominating Set: ");
 		System.out.println(dominatingSet2);
 
+		List<Node> takeTwoVertexCover2 = VertexCover.takeTwoApproximation(test2);
+        System.out.print("Vertex Cover: ");
+        System.out.println(takeTwoVertexCover2);
+
 
 		// TEST 3
 		System.out.println("\n\nTest 3: ...");
@@ -64,5 +71,9 @@ public class App
 		List<Node> dominatingSet3 = DominatingSet.findGreedyDominatingSet(test3);
 		System.out.print("Dominating Set: ");
 		System.out.println(dominatingSet3);
+
+		List<Node> takeTwoVertexCover3 = VertexCover.takeTwoApproximation(test3);
+        System.out.print("Vertex Cover: ");
+        System.out.println(takeTwoVertexCover3);
 	}
 }
