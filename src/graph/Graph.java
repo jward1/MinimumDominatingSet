@@ -59,9 +59,11 @@ public class Graph
 	 */
 	public void addEdge(int v1, int v2)
 	{	
-		// ensure that the from and to nodes are in the Graph; add them if not
-		if (!nodes.containsKey(v1))	addNode(v1);
-		if (!nodes.containsKey(v2)) addNode(v2);
+		// ensure that the from and to nodes are in the Graph
+		if (!nodes.containsKey(v1))	
+            throw new NullPointerException("Node " + v1 + " is not contained in the Graph.");
+		if (!nodes.containsKey(v2))
+            throw new NullPointerException("Node " + v2 + " is not contained in the Graph.");
 		
 		// extract Node objects from Graph and construct new Edge object
 		Node node1 = nodes.get(v1);
@@ -298,11 +300,14 @@ public class Graph
 
 	public static void main(String[] args)
 	{
-		tests();
+		// tests();
 
-		// Graph testEnron = new Graph();
-		// tools.GraphLoader.loadGraph(testEnron, "data/email-Enron.txt");
+		Graph testEnron = new Graph();
+		tools.GraphLoader.loadGraph(testEnron, "data/email-Enron.txt");
 		
+        System.out.println("Undirected Enron graph has " + testEnron.getNumNodes() + " nodes.");
+        System.out.println("Undirected Enron graph has " + testEnron.getNumEdges() + " edges.");
+
 		// long start = System.currentTimeMillis();
 		// LinkedList<Integer> enronDominatingSet = testEnron.findGreedyDominatingSet();
 		// long end = System.currentTimeMillis();
