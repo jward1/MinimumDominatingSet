@@ -10,14 +10,24 @@ public class App
 {
 	public static void main(String[] args)
 	{
-		System.out.println("Running tests ...");
-		tests();
+		// System.out.println("Running tests ...");
+		// tests();
 
-		// Graph testEnron = new Graph();
-		// tools.GraphLoader.loadGraph(testEnron, "data/email-Enron.txt");
+		Graph enron = new Graph();
+		tools.GraphLoader.loadGraph(enron, "data/email-Enron.txt");
 		
-        // System.out.println("Undirected Enron graph has " + testEnron.getNumNodes() + " nodes.");
-        // System.out.println("Undirected Enron graph has " + testEnron.getNumEdges() + " edges.");
+        System.out.println("The undirected Enron graph has " + enron.getNumNodes() + " nodes.");
+        System.out.println("Undirected facebook_1000 graph has " + enron.getNumEdges() + " edges.");
+
+		long start = System.currentTimeMillis();
+		List<Node> enronVertexCover = VertexCover.smartTree(enron);
+		long end = System.currentTimeMillis();
+
+		double seconds = end/1000.0 - start/1000.0;
+		System.out.println("The program a MINIMUM vertex cover set in " + seconds + " seconds.");
+		System.out.println("The minimum vertex cover has " + enronVertexCover.size() + " nodes.");
+		System.out.println("The minimum vertex cover that was found is ...");
+		System.out.println(enronVertexCover);
 
 		// long start = System.currentTimeMillis();
 		// LinkedList<Integer> enronDominatingSet = testEnron.findGreedyDominatingSet();

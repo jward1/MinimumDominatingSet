@@ -5,6 +5,7 @@ import graph.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class VertexCover
 {
@@ -61,19 +62,18 @@ public class VertexCover
 	 */
 	public static List<Node> smartTree(Graph graph)
 	{	
-		List<Node> vertexCover = new ArrayList<Node>();
-		int size = recursiveSmartTree(graph);
-
-		for (Node node : graph.getNodes())
-		{
-			if (node.isCovered() == 1)
-				vertexCover.add(node);
-		}
+		List<Node> vertexCover = recursiveSmartTree(graph);
+		// System.out.println(size);
+		// for (Node node : graph.getNodes())
+		// {
+		// 	if (node.isCovered() == 1)
+		// 		vertexCover.add(node);
+		// }
 
 		return vertexCover;
 	}
 
-	private static int recursiveSmartTree(Graph graph)
+	private static ArrayList<Node> recursiveSmartTree(Graph graph)
 	{
 	    // Make sure it is still possible to assign a valid vertex cover
 	    // That is, loop through all of the edges in the graph.
@@ -89,7 +89,7 @@ public class VertexCover
 	    	
 	    	if ( v1.isCovered() == 0 && v2.isCovered() == 0 )
 	    	{
-	    		return Integer.MAX_VALUE;
+	    		return (ArrayList<Node>) graph.getNodes();
 	    	}
 	    	
 	    	// Find two unassigned vertices and assign them ...
@@ -104,40 +104,44 @@ public class VertexCover
 		// If two vertices cannot be found, return the size of the vertex cover
 		if (u == null)
 		{
-			int size = 0;
+			ArrayList<Node> vCover = new ArrayList<Node>();
 			for (Node node : graph.getNodes() )
 			{
 				if (node.isCovered() == 1)
 				{
-					size++;
+					vCover.add(node);
 				}
 				else if (node.isCovered() == -1)
 				{
 					for (Edge e : node.getEdges() )
 					{
-						if (e.isCovered() != 1)
+						if (e.isCovered() != 1 && (e.getOtherNode(node)).isCovered() == 0 )
+						{
 							node.setIsCovered(1);
+							vCover.add(node);
+							break;
+						}
 					}
 				}
 			}
-			return size;
+			return vCover;
 		}
 
 		// recursive paths
 		u.setIsCovered(0);
 		v.setIsCovered(1);
-		int size01 = recursiveSmartTree(graph);
+		ArrayList<Node> vc01 = recursiveSmartTree(graph);
 		u.setIsCovered(1);
 		v.setIsCovered(0);
-		int size10 = recursiveSmartTree(graph);
+		ArrayList<Node> vc10 = recursiveSmartTree(graph);
 		u.setIsCovered(1);
 		v.setIsCovered(1);
-		int size11 = recursiveSmartTree(graph);
+		ArrayList<Node> vc11 = recursiveSmartTree(graph);
 
 		// return smallest cover
-		if (size01 <= size10 && size01 <= size11)		{ return size01; }
-		else if (size10 <= size01 && size10 <= size11)	{ return size10; }
-		else											{ return size11; }
+		if (vc01.size() <= vc10.size() && vc01.size() <= vc11.size() )		{ return vc01; }
+		else if (vc10.size() <= vc01.size() && vc10.size() <= vc11.size() )	{ return vc10; }
+		else																{ return vc11; }
 
 	}
 
