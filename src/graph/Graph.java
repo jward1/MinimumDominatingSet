@@ -32,7 +32,7 @@ public class Graph
 
 
 	/** 
-	 * Adds a node to the graph.
+	 * Adds a node to the graph. Runs in O(1)
 	 * @param key An integer that acts as node's name
 	 */
 	public void addNode(int key)
@@ -43,6 +43,35 @@ public class Graph
 			nodes.put(key, newNode);
 		}
 		return;
+	}
+
+	
+	public void removeNode(int nodeToRemove)
+	{
+		removeNodesEdges(nodeToRemove);
+		nodes.get(nodeToRemove) = null;
+	}
+
+	
+	public void removeNode(Node nodeToRemove)
+	{
+		removeNodesEdges(nodeToRemove);
+		nodes.get(nodeToRemove.name()) = null;
+	}
+
+	
+	public void removeNodeEdges(int nodeToRemove)
+	{
+		Node node = nodes.get(nodeToRemove);
+		removeNodesEdges(node);
+
+	}
+
+
+	public void removeNodesEdges(Node nodeToRemove)
+	{
+		for (Edge edge : nodeToRemove.getEdges())
+			edges.get(edge) = null;
 	}
 
 	
@@ -79,7 +108,7 @@ public class Graph
 
 
 	/** 
-	 * Returns the nodes of the Graph
+	 * Returns the nodes of the Graph.
 	 * @return A List of Nodes that contained in the Graph
 	 */
 	public List<Node> getNodes()
@@ -87,7 +116,7 @@ public class Graph
 
 
     /** 
-     * Returns the total number of nodes in the Graph
+     * Returns the total number of nodes in the Graph.
      * @return An int representing the number of nodes in the Graph
      */
     public int getNumNodes()
@@ -101,7 +130,7 @@ public class Graph
     {	return new ArrayList<Edge>(edges); }
 
 	/** 
-	 * Returns the total number of edges in the Graph
+	 * Returns the total number of edges in the Graph.
 	 * @return An int representing the number of edges in the Graph
 	 */
     public int getNumEdges()
@@ -133,6 +162,7 @@ public class Graph
 
     /**
      * Resets all Nodes and Edges in graph to uncovered.
+     * Runs in O(|V| + |E|).
      */
     public void resetGraph()
     {

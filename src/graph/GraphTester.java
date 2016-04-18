@@ -36,62 +36,76 @@ public class GraphTester {
 		tools.GraphLoader.loadGraph(test4a, "data/dominating_set_test_2.txt");
 	}
 
-	
-	/** Test if the get method is working correctly.
-	 */
-	/*You should not need to add much to this method.
-	 * We provide it as an example of a thorough test. */
 	@Test
-	public void testGraphLoader()
+	public void testAddVertex()
 	{
-		//test empty list, get should throw an exception
-		try {
-			emptyList.get(0);
-			fail("Check out of bounds");
-		}
-		catch (IndexOutOfBoundsException e) {
-			
-		}
-		
-		// test short list, first contents, then out of bounds
-		assertEquals("Check first", "A", shortList.get(0));
-		assertEquals("Check second", "B", shortList.get(1));
-		
-		try {
-			shortList.get(-1);
-			fail("Check out of bounds");
-		}
-		catch (IndexOutOfBoundsException e) {
-		
-		}
-		try {
-			shortList.get(2);
-			fail("Check out of bounds");
-		}
-		catch (IndexOutOfBoundsException e) {
-		
-		}
-		// test longer list contents
-		for(int i = 0; i<LONG_LIST_LENGTH; i++ ) {
-			assertEquals("Check "+i+ " element", (Integer)i, longerList.get(i));
-		}
-		
-		// test off the end of the longer array
-		try {
-			longerList.get(-1);
-			fail("Check out of bounds");
-		}
-		catch (IndexOutOfBoundsException e) {
-		
-		}
-		try {
-			longerList.get(LONG_LIST_LENGTH);
-			fail("Check out of bounds");
-		}
-		catch (IndexOutOfBoundsException e) {
-		}
-		
+		Graph test = new Graph();
+		test.addNode(1);
+		test.addNode(2);
+		test.addEdge(1, 2);
+
+		assertEquals("Check size", 2, test.numNodes() );
+
+		test.removeNode(2);
+		assertEquals("")
 	}
+
+	
+	// /** Test if the get method is working correctly.
+	//  */
+	// /*You should not need to add much to this method.
+	//  * We provide it as an example of a thorough test. */
+	// @Test
+	// public void testGraphLoader()
+	// {
+	// 	//test empty list, get should throw an exception
+	// 	try {
+	// 		emptyList.get(0);
+	// 		fail("Check out of bounds");
+	// 	}
+	// 	catch (IndexOutOfBoundsException e) {
+			
+	// 	}
+		
+	// 	// test short list, first contents, then out of bounds
+	// 	assertEquals("Check first", "A", shortList.get(0));
+	// 	assertEquals("Check second", "B", shortList.get(1));
+		
+	// 	try {
+	// 		shortList.get(-1);
+	// 		fail("Check out of bounds");
+	// 	}
+	// 	catch (IndexOutOfBoundsException e) {
+		
+	// 	}
+	// 	try {
+	// 		shortList.get(2);
+	// 		fail("Check out of bounds");
+	// 	}
+	// 	catch (IndexOutOfBoundsException e) {
+		
+	// 	}
+	// 	// test longer list contents
+	// 	for(int i = 0; i<LONG_LIST_LENGTH; i++ ) {
+	// 		assertEquals("Check "+i+ " element", (Integer)i, longerList.get(i));
+	// 	}
+		
+	// 	// test off the end of the longer array
+	// 	try {
+	// 		longerList.get(-1);
+	// 		fail("Check out of bounds");
+	// 	}
+	// 	catch (IndexOutOfBoundsException e) {
+		
+	// 	}
+	// 	try {
+	// 		longerList.get(LONG_LIST_LENGTH);
+	// 		fail("Check out of bounds");
+	// 	}
+	// 	catch (IndexOutOfBoundsException e) {
+	// 	}
+		
+	// }
 	
 
 // 	/** Test removing an element from the list.
