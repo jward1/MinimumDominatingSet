@@ -8,17 +8,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class VertexCover
-{
+{	
+	/**
+	 * An approximation algorithm for Vertex Cover.
+	 * 
+	 * The appox. algorithm cycles through all of the edges of a graph.
+	 * If the edge is uncovered, the algorithm addes the edge's two vertices
+	 * to the vertex cover and marks the edge and all other edges of the two 
+	 * vertices as covered. It continues until all edges are covered.
+	 * 
+	 * The Take Two Approximation algorithm will return a vertex cover of size
+	 * between k and 2*k where k is the (unknown) minimum vertex cover. The 
+	 * algorithm runs in O(2*|E|).
+	 *
+	 * @param graph The input graph for which a vertex cover should be found.
+	 * @return A List of Nodes that form a vertex cover for the input graph.
+	 */
 	public static List<Node> takeTwoApproximation(Graph graph)
 	{
 		List<Node> takeTwoVertexCover = new ArrayList<Node>();
 
 		int numberOfEdges = graph.getNumEdges();
 		int numCoveredEdges = 0;
-
-		while (numCoveredEdges < numberOfEdges)
+	
+		for (Edge edge : graph.getEdges() )
 		{	
-			for (Edge edge : graph.getEdges() )
+			// terminate search if all edges are covered
+			if (numCoveredEdges < numberOfEdges)
 			{
 				if ( edge.isCovered() != 1 )
 				{	
@@ -35,11 +51,17 @@ public class VertexCover
 			}
 		}
 
+		// reset graph --> O(|V| + |E|)
 		graph.resetGraph();
 		return takeTwoVertexCover;
 	}
 
-
+	/**
+	 * Marks all uncovered edges of a given node as 'covered'.
+	 * Runs in O( |N(node)| ) where N(x) is the neighborhood of node x.
+	 * @param node The node whose edges need to be marked as covered.
+	 * @return An integer of the number of edges that were marked as covered.
+	 */
 	private static int coverNodesEdges(Node node)
 	{
 		int numEdgesUpdated = 0;
@@ -54,11 +76,10 @@ public class VertexCover
 		return numEdgesUpdated;
 	}
 
-	/*
-	 *
-	 * TODO: NEED TO FIND A BETTER REPRESENTATION. SWITCH TO ADJACENCY MATRIX 
-	 * 		 WITH AN ASSIGNMENT ARRAY?
-	 *
+	/**
+	 * 
+	 * @param graph The input graph for which a minimum vertex cover should be found.
+	 * @return A List of Nodes that form a minimum vertex cover for the input graph.
 	 */
 	public static List<Node> smartTree(Graph graph)
 	{	

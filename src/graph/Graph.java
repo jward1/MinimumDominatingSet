@@ -47,7 +47,7 @@ public class Graph
 
 	
 	/** 
-	 *Adds an undirected edge to the graph.
+	 * Adds an undirected edge to the graph.
 	 * @param v1 The name of the Node at one end of the edge
 	 * @param v2 The name of the Node at the other end of the edge
 	 */
