@@ -25,6 +25,28 @@ public class DominatingSet
         return mds;
     }
 
+
+    /**
+     * This method implements the core of the algorithm developed by Fomin, et. al. 
+     * 
+     * The recursive search tree works finding all nodes with degree 1 and 2 (that is,
+     * nodes with only 1 or 2 neighbors). 
+     *      Case 1: If node v is of degree 1, then this algorithm marks its sole 
+     *      neighbor w as in the dominating set and all of w's neighbors as out of the
+     *      dominating set (0).
+     *      Case 2: If the node v is of degree 2, then this algorithm splits into three
+     *      subcases. Let the two neighbors be denoted as u1 and u2
+     *          Case 2a: Mark u1 as in D, and v and u2 as not in D. Recurse on resulting graph.
+     *          Case 2b: Mark v as in D, and u1 and u2 as not in D. Recurse on resulting graph.
+     *          Case 2c: Mark u2 as in D, and u1 and v as not in D. Recurse on resulting graph.
+     *      In each subcase, when a node is marked as in D, all of its neighbors are marked as not
+     *      being in D.
+     * After the search tree has dealt with all nodes of degree one and two, it calls the brute force
+     * search to find the minimum dominating set on the "reduced" graph.
+     * 
+     * @param graph The graph object for which a minimum dominating set is to be found.
+     * @return A List of Nodes representing the nodes included in the dominating set.
+     */
     private static List<Node> recursiveSearchTree(Graph graph)
     {   
         Node w = null;
