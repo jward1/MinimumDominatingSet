@@ -53,6 +53,6 @@ public class Node
 
 	public String toString() { return Integer.toString(this.name); }
 
-	public int getNumOutgoingEdges() { return this.nodesEdges.size(); }
+	public int getNumEdges() { return this.nodesEdges.size(); }
 	
 }

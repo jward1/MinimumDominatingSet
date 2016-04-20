@@ -84,12 +84,6 @@ public class VertexCover
 	public static List<Node> smartTree(Graph graph)
 	{	
 		List<Node> vertexCover = recursiveSmartTree(graph);
-		// System.out.println(size);
-		// for (Node node : graph.getNodes())
-		// {
-		// 	if (node.isCovered() == 1)
-		// 		vertexCover.add(node);
-		// }
 
 		return vertexCover;
 	}

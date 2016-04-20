@@ -48,15 +48,16 @@ public class Graph
 	
 	public void removeNode(int nodeToRemove)
 	{
-		removeNodesEdges(nodeToRemove);
-		nodes.get(nodeToRemove) = null;
+		Node node = nodes.get(nodeToRemove);
+		removeNodesEdges(node);
+		nodes.put(nodeToRemove, null);
 	}
 
 	
 	public void removeNode(Node nodeToRemove)
 	{
 		removeNodesEdges(nodeToRemove);
-		nodes.get(nodeToRemove.name()) = null;
+		nodes.put(nodeToRemove.getName(), null);
 	}
 
 	
@@ -71,7 +72,7 @@ public class Graph
 	public void removeNodesEdges(Node nodeToRemove)
 	{
 		for (Edge edge : nodeToRemove.getEdges())
-			edges.get(edge) = null;
+			edges.remove(edge);
 	}
 
 	
@@ -104,6 +105,20 @@ public class Graph
         node1.addEdge(newEdge);
         node2.addEdge(newEdge);
         
+	}
+
+	/**
+	 * Adds an undirected edge to the graph. Useful for building 
+	 * copies of a graph or separate subgraphs.
+	 * @param newEdge The edge to be added to the graph.
+	 */
+	public void addEdge(Edge newEdge)
+	{
+		edges.add(newEdge);
+		Node v1 = newEdge.getNodev1();
+		Node v2 = newEdge.getNodev2();
+		v1.addEdge(newEdge);
+		v2.addEdge(newEdge);
 	}
 
 
