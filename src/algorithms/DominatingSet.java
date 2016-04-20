@@ -22,6 +22,8 @@ public class DominatingSet
     public static List<Node> findMinimumDominatingSet(Graph graph)
     {   
         List<Node> mds = recursiveSearchTree(graph);
+        //List<Node> mds = bruteForce(graph);
+        graph.resetGraph();
         return mds;
     }
 
@@ -54,11 +56,13 @@ public class DominatingSet
         Node u2 = null;
         Node v = null;
 
-        List<Node> w1 = (List<Node>) graph.getNodes();
-        List<Node> u11 = (List<Node>) graph.getNodes();
-        List<Node> u21 = (List<Node>) graph.getNodes();
-        List<Node> v1 = (List<Node>) graph.getNodes();
+        // initialize results to all nodes in graph
+        List<Node> wResult  = (List<Node>) graph.getNodes();
+        List<Node> u1Result = (List<Node>) graph.getNodes();
+        List<Node> u2Result = (List<Node>) graph.getNodes();
+        List<Node> vResult  = (List<Node>) graph.getNodes();
 
+        // find nodes with either 1 or 2 uncovered neighbors
         for (Node n : graph.getNodes() )
         {
             int num = getNumUncoveredNeighborsSearchTree(n);
@@ -76,38 +80,48 @@ public class DominatingSet
             }
         }
 
+        // if all are null, then graph only contains nodes with 
+        // zero or three or more neighbors
         if (w==null && u1==null && u2==null && v==null)
             return bruteForce(graph);
 
+        // recursive branching
         if (w != null)
-            w1 = recursiveSearchTree(graph);
+            wResult = recursiveSearchTree(graph);
 
         if (u1 != null)
         {
             updateGraph(graph, u1);
             u2.setIsCovered(0);
-            u11 = recursiveSearchTree(graph);
+            u1Result = recursiveSearchTree(graph);
 
             updateGraph(graph, v);
-            v1 = recursiveSearchTree(graph);
+            vResult = recursiveSearchTree(graph);
 
             updateGraph(graph, u2);
             u1.setIsCovered(0);
-            u21 = recursiveSearchTree(graph);
+            u2Result = recursiveSearchTree(graph);
         }
 
-        int minNum = Math.min( w1.size(), Math.min(u11.size(), Math.min(u21.size(), v1.size())));
-        //int minNum = Math.min( u11.size(), Math.min(u21.size(), v1.size()));
+        // return smallest result
+        int minNum = Math.min( wResult.size(), Math.min(u1Result.size(), Math.min(u2Result.size(), vResult.size())));
 
-        if (minNum == w1.size())  { return w1; }
-        else if (minNum == u11.size()) { return u11; }
-        else if (minNum == u21.size()) { return u21; }
-        else                           { return v1; }
+        if      (minNum == wResult.size())  { return wResult;  }
+        else if (minNum == u1Result.size()) { return u1Result; }
+        else if (minNum == u2Result.size()) { return u2Result; }
+        else                                { return vResult;  }
     }
 
 
     /**
+     * Finds the minimum dominant set of a graph.
      *
+     * This uses brute force, that is, it tries every possible combination of assignments,
+     * to find a minimum dominant set of a graph. Given that there are 2 possible states for
+     * each of the n nodes, this method runs in O(2^n).
+     *
+     * @param graph The graph object for which a minimum dominating set is to be found.
+     * @return A List of Nodes representing the nodes included in the dominating set.
      */
     private static List<Node> bruteForce(Graph graph)
     {   
@@ -161,8 +175,13 @@ public class DominatingSet
         else                         { return u1; }
     }
 
+
     /**
+     * Updates the graph by marking the node as in the Dominating Set and
+     * all of its neighbors as out of the dominating set.
      *
+     * @param graph The graph object that is being updated.
+     * @param node The node to mark as covered and its neighbors as uncovered.
      */
     private static void updateGraph(Graph graph, Node node)
     {
@@ -173,7 +192,11 @@ public class DominatingSet
 
 
     /** 
+     * Returns the number of uncovered neighbors of a given node.
      *
+     * @param node The node for which to count the number of neighbors that are not in the 
+     *             dominating set.
+     * @return The number of a node's neighbors that are not in the dominating set.
      */
     private static int getNumUncoveredNeighborsSearchTree(Node node)
     {
@@ -185,13 +208,6 @@ public class DominatingSet
     }
 
 
-
-
-
-
-
-
-
     /**
      * Returns a list of the Nodes that are included in the Dominating Set.
      * This implementation uses a Greedy Algorithm to find the dominating set 
@@ -199,7 +215,7 @@ public class DominatingSet
      * not in D is adjacent to at least one node in D.
      *
      * Note. This implementation on returns a Dominating Set. It does not return the 
-     * minimum (or smallest) dominating set.
+     * minimum dominating set.
      *
      * @param graph The graph object for which a dominating set is to be found.
      * 
@@ -269,7 +285,7 @@ public class DominatingSet
 
 
     /**
-     *
+     * 
      */
     private static int updateCover(Node node)
     {   
@@ -295,20 +311,35 @@ public class DominatingSet
 
     public static void main(String[] args)
     {
-        Graph g = new Graph();
-        GraphLoader.loadGraph(g, "data/dominating_set_test.txt");
-        System.out.println(g.exportGraphString());
-        System.out.println(findMinimumDominatingSet(g));
+        Graph aaa = new Graph();
+        GraphLoader.loadGraph(aaa, "data/dominating_set_test.txt");
+        System.out.println(aaa.exportGraphString());
+        System.out.println(findMinimumDominatingSet(aaa));
+        System.out.println(findGreedyDominatingSet(aaa));
 
-        Graph k = new Graph();
-        GraphLoader.loadGraph(k, "data/dominating_set_test_2.txt");
-        System.out.println(k.exportGraphString());
-        System.out.println(findMinimumDominatingSet(k));
+        Graph bbb = new Graph();
+        GraphLoader.loadGraph(bbb, "data/dominating_set_test_2.txt");
+        System.out.println(bbb.exportGraphString());
+        System.out.println(findMinimumDominatingSet(bbb));
+        System.out.println(findGreedyDominatingSet(bbb));
 
-        Graph t = new Graph();
-        GraphLoader.loadGraph(t, "data/small_test_graph.txt");
-        System.out.println(t.exportGraphString());
-        System.out.println(findMinimumDominatingSet(t));
+        Graph ccc = new Graph();
+        GraphLoader.loadGraph(ccc, "data/small_test_graph.txt");
+        System.out.println(ccc.exportGraphString());
+        System.out.println(findMinimumDominatingSet(ccc));
+        System.out.println(findGreedyDominatingSet(ccc));
+
+        // Graph ddd = new Graph();
+        // GraphLoader.loadGraph(ddd, "data/facebook_1000.txt");
+        // System.out.println(ddd.exportGraphString());
+        // System.out.println("\nMinimum Dominating Set ...");
+        // List<Node> mds = findMinimumDominatingSet(ddd);
+        // System.out.println(mds);
+        // System.out.println( mds.size() );
+        // System.out.println("\nGreedy Dominating Set ...");
+        // List<Node> gds = findGreedyDominatingSet(ddd);
+        // System.out.println(gds);
+        // System.out.println( gds.size() );
     }
 
 }
