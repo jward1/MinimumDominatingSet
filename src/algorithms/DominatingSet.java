@@ -21,15 +21,7 @@ public class DominatingSet
      */
     public static List<Node> findMinimumDominatingSet(Graph graph)
     {   
-        List<Node> mds;
-        // prune the graph
-        //recursiveSearchTree(graph, mds);
-        //System.out.println(mds);
-        // brute force on remaining graph
-        
-        //Graph subgraph = new Graph();
-        mds = bruteForce(graph);
-        
+        List<Node> mds = recursiveSearchTree(graph);
         return mds;
     }
 
@@ -40,14 +32,20 @@ public class DominatingSet
         Node u2 = null;
         Node v = null;
 
+        List<Node> w1 = (List<Node>) graph.getNodes();
+        List<Node> u11 = (List<Node>) graph.getNodes();
+        List<Node> u21 = (List<Node>) graph.getNodes();
+        List<Node> v1 = (List<Node>) graph.getNodes();
+
         for (Node n : graph.getNodes() )
         {
             int num = getNumUncoveredNeighborsSearchTree(n);
-            if (num == 1)
+            if (num == 1 && n.isCovered() == -1)
             {
                 w = (new ArrayList<Node>(n.getNeighbors())).get(0);
+                updateGraph(graph, w);
             }
-            else if (num == 2)
+            else if (num == 2 && n.isCovered() == -1)
             {
                 ArrayList<Node> uv = new ArrayList<Node>(n.getNeighbors());
                 u1 = uv.get(0);
@@ -59,28 +57,36 @@ public class DominatingSet
         if (w==null && u1==null && u2==null && v==null)
             return bruteForce(graph);
 
-        updateGraph(graph, w);
-        List<Node> w1 = recursiveSearchTree(graph);
+        if (w != null)
+            w1 = recursiveSearchTree(graph);
 
-        updateGraph(graph, u1);
-        u2.setIsCovered(0);
-        List<Node> u11 = recursiveSearchTree(graph);
+        if (u1 != null)
+        {
+            updateGraph(graph, u1);
+            u2.setIsCovered(0);
+            u11 = recursiveSearchTree(graph);
 
-        updateGraph(graph, v);
-        List<Node> v1 = recursiveSearchTree(graph);
+            updateGraph(graph, v);
+            v1 = recursiveSearchTree(graph);
 
-        updateGraph(graph, u2);
-        u1.setIsCovered(0);
-        List<Node> u21 = recursiveSearchTree(graph);
+            updateGraph(graph, u2);
+            u1.setIsCovered(0);
+            u21 = recursiveSearchTree(graph);
+        }
 
         int minNum = Math.min( w1.size(), Math.min(u11.size(), Math.min(u21.size(), v1.size())));
+        //int minNum = Math.min( u11.size(), Math.min(u21.size(), v1.size()));
 
-        if      (minNum == w1.size())  { return w1; }
+        if (minNum == w1.size())  { return w1; }
         else if (minNum == u11.size()) { return u11; }
         else if (minNum == u21.size()) { return u21; }
-        else                           {return v1; }
+        else                           { return v1; }
     }
 
+
+    /**
+     *
+     */
     private static List<Node> bruteForce(Graph graph)
     {   
         
@@ -102,7 +108,7 @@ public class DominatingSet
                     }
 
                 if (allNeighborsAreSetToUncovered)
-                    return (ArrayList<Node>) graph.getNodes();
+                    return (List<Node>) graph.getNodes();
             }
             else if (node.isCovered() == -1)
             {
@@ -133,6 +139,9 @@ public class DominatingSet
         else                         { return u1; }
     }
 
+    /**
+     *
+     */
     private static void updateGraph(Graph graph, Node node)
     {
         for (Node neighbor : node.getNeighbors() )
@@ -140,6 +149,10 @@ public class DominatingSet
         node.setIsCovered(1);
     }
 
+
+    /** 
+     *
+     */
     private static int getNumUncoveredNeighborsSearchTree(Node node)
     {
         int num = 0;
