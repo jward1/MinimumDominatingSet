@@ -88,7 +88,7 @@ public class VertexCover
 		return vertexCover;
 	}
 
-	private static ArrayList<Node> recursiveSmartTree(Graph graph)
+	private static List<Node> recursiveSmartTree(Graph graph)
 	{
 	    // Make sure it is still possible to assign a valid vertex cover
 	    // That is, loop through all of the edges in the graph.
@@ -104,7 +104,7 @@ public class VertexCover
 	    	
 	    	if ( v1.isCovered() == 0 && v2.isCovered() == 0 )
 	    	{
-	    		return (ArrayList<Node>) graph.getNodes();
+	    		return (List<Node>) graph.getNodes();
 	    	}
 	    	
 	    	// Find two unassigned vertices and assign them ...
@@ -116,48 +116,56 @@ public class VertexCover
 	    }
 
 
-		// If two vertices cannot be found, return the size of the vertex cover
+		// If two vertices cannot be found, complete and return the vertex cover
 		if (u == null)
 		{
-			ArrayList<Node> vCover = new ArrayList<Node>();
-			for (Node node : graph.getNodes() )
-			{
-				if (node.isCovered() == 1)
-				{
-					vCover.add(node);
-				}
-				else if (node.isCovered() == -1)
-				{
-					for (Edge e : node.getEdges() )
-					{
-						if (e.isCovered() != 1 && (e.getOtherNode(node)).isCovered() == 0 )
-						{
-							node.setIsCovered(1);
-							vCover.add(node);
-							break;
-						}
-					}
-				}
-			}
-			return vCover;
+			return constructVertexCover(graph);
 		}
 
 		// recursive paths
 		u.setIsCovered(0);
 		v.setIsCovered(1);
-		ArrayList<Node> vc01 = recursiveSmartTree(graph);
+		List<Node> vc01 = recursiveSmartTree(graph);
 		u.setIsCovered(1);
 		v.setIsCovered(0);
-		ArrayList<Node> vc10 = recursiveSmartTree(graph);
+		List<Node> vc10 = recursiveSmartTree(graph);
 		u.setIsCovered(1);
 		v.setIsCovered(1);
-		ArrayList<Node> vc11 = recursiveSmartTree(graph);
+		List<Node> vc11 = recursiveSmartTree(graph);
 
 		// return smallest cover
 		if (vc01.size() <= vc10.size() && vc01.size() <= vc11.size() )		{ return vc01; }
 		else if (vc10.size() <= vc01.size() && vc10.size() <= vc11.size() )	{ return vc10; }
 		else																{ return vc11; }
 
+	}
+
+	/**
+	 *
+	 */
+	private static List<Node> constructVertexCover(Graph graph)
+	{
+		List<Node> vCover = new ArrayList<Node>();
+		for (Node node : graph.getNodes() )
+		{
+			if (node.isCovered() == 1)
+			{
+				vCover.add(node);
+			}
+			else if (node.isCovered() == -1)
+			{
+				for (Edge e : node.getEdges() )
+				{
+					if (e.isCovered() != 1 && (e.getOtherNode(node)).isCovered() == 0 )
+					{
+						node.setIsCovered(1);
+						vCover.add(node);
+						break;
+					}
+				}
+			}
+		}
+		return vCover;
 	}
 
 

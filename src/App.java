@@ -16,8 +16,8 @@ public class App
 		// Graph enron = new Graph();
 		// tools.GraphLoader.loadGraph(enron, "data/email-Enron.txt");
 		
-  //       System.out.println("The undirected Enron graph has " + enron.getNumNodes() + " nodes.");
-  //       System.out.println("Undirected facebook_1000 graph has " + enron.getNumEdges() + " edges.");
+  		// System.out.println("The undirected Enron graph has " + enron.getNumNodes() + " nodes.");
+		// System.out.println("Undirected facebook_1000 graph has " + enron.getNumEdges() + " edges.");
 
 		// long start = System.currentTimeMillis();
 		// List<Node> enronVertexCover = VertexCover.smartTree(enron);
