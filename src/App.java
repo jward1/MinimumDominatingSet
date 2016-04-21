@@ -83,7 +83,7 @@ public class App
 		// TEST 3
 		System.out.println("\n\nTest 3: ...");
 		Graph test3 = new Graph();
-		GraphLoader.loadGraph(test3, "data/dominating_set_test_2.txt");
+		GraphLoader.loadGraph(test3, "data/facebook_1000.txt");
 		System.out.println(test3.exportGraphString());
 
 		List<Node> dominatingSet3 = DominatingSet.findGreedyDominatingSet(test3);
@@ -91,11 +91,13 @@ public class App
 		System.out.println(dominatingSet3);
 
 		List<Node> takeTwoVertexCover3 = VertexCover.takeTwoApproximation(test3);
-        System.out.print("Vertex Cover with take two approximation: ");
+        System.out.println("Vertex Cover with take two approximation: ");
+        System.out.println("Size: " + takeTwoVertexCover3.size());
         System.out.println(takeTwoVertexCover3);
 
         List<Node> treeVertexCover3 = VertexCover.smartTree(test3);
-        System.out.print("Vertex Cover with search tree: ");
+        System.out.println("Vertex Cover with search tree: ");
+        System.out.println("Size: " + treeVertexCover3.size());
         System.out.println(treeVertexCover3);
 	}
 }
