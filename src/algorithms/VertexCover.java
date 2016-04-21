@@ -132,6 +132,8 @@ public class VertexCover
 		u.setIsCovered(1);
 		v.setIsCovered(1);
 		List<Node> vc11 = recursiveSmartTree(graph);
+		u.setIsCovered(-1);
+		v.setIsCovered(-1);
 
 		// return smallest cover
 		if (vc01.size() <= vc10.size() && vc01.size() <= vc11.size() )		{ return vc01; }

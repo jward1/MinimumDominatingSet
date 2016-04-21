@@ -33,6 +33,9 @@ public class Node
 		return neighbors;
 	}
 
+	public int numNeighbors()
+	{	return nodesEdges.size(); }
+
 	public HashSet<Edge> getEdges() { return this.nodesEdges; }
 	
 	public int isCovered() { return this.isCovered; }
