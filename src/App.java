@@ -10,8 +10,8 @@ public class App
 {
 	public static void main(String[] args)
 	{
-		System.out.println("Running tests ...");
-		tests();
+		// System.out.println("Running tests ...");
+		// tests();
 
 		Graph fb = new Graph();
 		tools.GraphLoader.loadGraph(fb, "data/facebook_2000.txt");
