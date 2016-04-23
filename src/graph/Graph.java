@@ -4,8 +4,6 @@
  */
 package graph;
 
-//import tools.RandomGraph;
-
 import java.io.File;
 import java.util.Scanner;
 import java.util.HashMap;
@@ -45,7 +43,11 @@ public class Graph
 		return;
 	}
 
-	
+
+	/**
+	 * Removes a node and all of its Edges from a Graph.
+	 * @param nodeToRemove The Integer name of the node to be removed.
+	 */
 	public void removeNode(int nodeToRemove)
 	{
 		Node node = nodes.get(nodeToRemove);
@@ -54,6 +56,10 @@ public class Graph
 	}
 
 	
+	/**
+	 * Removes a node and all of its Edges from a Graph.
+	 * @param nodeToRemove The Node object to be removed.
+	 */
 	public void removeNode(Node nodeToRemove)
 	{
 		removeNodesEdges(nodeToRemove);
@@ -61,6 +67,10 @@ public class Graph
 	}
 
 	
+	/**
+	 * Removes the Edges from a graph for a given Node.
+	 * @nodeToRemove The Integer name of the node to be removed.
+	 */
 	public void removeNodeEdges(int nodeToRemove)
 	{
 		Node node = nodes.get(nodeToRemove);
@@ -69,6 +79,10 @@ public class Graph
 	}
 
 
+	/**
+	 * Removes the Edges from a graph for a given Node.
+	 * @param nodeToRemove The Node object to be removed.
+	 */
 	public void removeNodesEdges(Node nodeToRemove)
 	{
 		for (Edge edge : nodeToRemove.getEdges())
@@ -107,6 +121,7 @@ public class Graph
         
 	}
 
+
 	/**
 	 * Adds an undirected edge to the graph. Useful for building 
 	 * copies of a graph or separate subgraphs.
@@ -144,6 +159,7 @@ public class Graph
     public List<Edge> getEdges()
     {	return new ArrayList<Edge>(edges); }
 
+
 	/** 
 	 * Returns the total number of edges in the Graph.
 	 * @return An int representing the number of edges in the Graph
@@ -175,6 +191,7 @@ public class Graph
         return s;
     }
 
+
     /**
      * Resets all Nodes and Edges in graph to uncovered.
      * Runs in O(|V| + |E|).
@@ -182,12 +199,11 @@ public class Graph
     public void resetGraph()
     {
         for (Node node : nodes.values() )
-            node.setIsCovered(-1);
+            node.setAssignment(-1);
 
         for (Edge edge : edges)
         	edge.setIsCovered(-1);
         
         return;
     }
-
 }

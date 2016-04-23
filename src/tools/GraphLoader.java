@@ -11,11 +11,16 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-public class GraphLoader {
+public class GraphLoader 
+{
     /**
-     * Loads graph with data from a file.
-     * The file should consist of lines with 2 integers each, corresponding
-     * to a "from" vertex and a "to" vertex.
+     * Loads graph from text file.
+     * 
+     * @param g An empty Graph object.
+     * @param filename The file containg the graph data to load. The file should
+     *                 consist of two columns of integers, a "from" vertex and
+     *                  a "to" vertex.
+     * @return A Graph object containg the nodes and edges from the file.
      */ 
     public static void loadGraph(graph.Graph g, String filename) {
         
