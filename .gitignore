@@ -4,6 +4,4 @@
 *.zip
 writeups/
 data/
-RandomGraph.java
-DirectedGraph.java
-DirectedNode.java
+old/

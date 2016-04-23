@@ -51,11 +51,12 @@ public class DominatingSet
      */
     private static List<Node> recursiveSearchTree(Graph graph)
     {   
-        Node w1  = null;
+        // initialize node variables
+        Node w1 = null;
+        Node w2 = null;
         Node u1 = null;
         Node u2 = null;
         Node v  = null;
-        Node w2 = null;
 
         // initialize results to all nodes in graph
         List<Node> wResult  = null;
@@ -63,6 +64,7 @@ public class DominatingSet
         List<Node> u2Result = null;
         List<Node> vResult  = null;
 
+        // set the size of the result sets to the max integer value
         int wSize = Integer.MAX_VALUE;
         int u1Size = Integer.MAX_VALUE;
         int u2Size = Integer.MAX_VALUE;
@@ -176,7 +178,8 @@ public class DominatingSet
                 }  
             }
         }
-
+        
+        // if graph is possible, find unassigned node
         for (Node node : graph.getNodes() )
         {
             if (node.isCovered() == -1) {
@@ -227,7 +230,10 @@ public class DominatingSet
     }
 
     /**
+     * Resets the graph for the next recursive pass
      *
+     * @param graph The graph object that is being reset.
+     * @param center The node at the center of the neighborhood that is being reset.
      */
     private static void resetNeighborhood(Graph graph, Node center)
     {
@@ -238,13 +244,13 @@ public class DominatingSet
 
 
     /** 
-     * Returns the number of uncovered neighbors of a given node.
+     * Returns the number of unassigned neighbors of a given node.
      *
-     * @param node The node for which to count the number of neighbors that are not in the 
-     *             dominating set.
-     * @return The number of a node's neighbors that are not in the dominating set.
+     * @param node The node for which to count the number of neighbors that have
+     *                  have not been assigned to in or out of the dominating set.
+     * @return The number of a node's neighbors that are not yet assigned.
      */
-    private static int getNumUncoveredNeighborsSearchTree(Node node)
+    private static int getNumUnassignedNeighbors(Node node)
     {
         int num = 0;
         for (Node neighbor : node.getNeighbors())
@@ -260,8 +266,8 @@ public class DominatingSet
      * of the graph. The Dominating Set, D, is a subset of nodes such that every
      * not in D is adjacent to at least one node in D.
      *
-     * Note. This implementation on returns a Dominating Set. It does not return the 
-     * minimum dominating set.
+     * Note. This implementation on returns a Dominating Set. It is not guaranteed to
+     * return the minimum dominating set.
      *
      * @param graph The graph object for which a dominating set is to be found.
      * 
@@ -271,12 +277,10 @@ public class DominatingSet
     {
     	// keep track of number of nodes and number of uncovered nodes
     	boolean allNodesAreCovered = false;
-
-
-    	// number of nodes visited, e.g., added to dominating set
-    	List<Node> visited = new ArrayList<Node>();
         Node maxCoverNode;
 
+        // keep track of nodes that have been visited
+        List<Node> visited = new ArrayList<Node>();
 
     	// make sure all nodes become covered
     	while (!allNodesAreCovered)
@@ -306,8 +310,7 @@ public class DominatingSet
     		// add newMax to list of visited nodes
     		visited.add(maxCoverNode);
 
-            // see if all nodes are covered
-            
+            // check that all nodes are covered
             allNodesAreCovered = true;
             for (Node node : graph.getNodes())
             {
@@ -342,7 +345,11 @@ public class DominatingSet
 
 
     /**
-     * 
+     * Updates the neighborhood of a node that has been assigned to 
+     * the dominating set by marking all of its neighbors as out of the
+     * dominating set.
+     *
+     * @param node The Node whose neighborhood needs to be updated.
      */
     private static void updateCover(Node node)
     {   

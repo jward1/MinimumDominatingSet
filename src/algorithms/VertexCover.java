@@ -2,6 +2,7 @@
 package algorithms;
 
 import graph.*;
+import tools.GraphLoader;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -168,6 +169,22 @@ public class VertexCover
 			}
 		}
 		return vCover;
+	}
+
+
+	public static void main(String[] args)
+	{
+		Graph g = new Graph();
+		GraphLoader.loadGraph(g, "data/facebook_1000.txt");
+		
+		long start = System.currentTimeMillis();
+		List<Node> vtxCvr = smartTree(g);
+		long end = System.currentTimeMillis();
+		double runtime = end/1000.0 - start/1000.0;
+		
+		System.out.println("Found vertex cover of size " + vtxCvr.size() + " in " + runtime + " seconds.");
+		System.out.println("The vertex cover is ...");
+		System.out.println(vtxCvr);
 	}
 
 
