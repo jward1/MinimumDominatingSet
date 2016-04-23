@@ -180,9 +180,8 @@ public class DominatingSet
         // if graph is possible, find unassigned node
         for (Node node : graph.getNodes() )
         {
-            if (node.isAssigned() == -1) {
+            if (node.isAssigned() == -1)
                 u = node;
-            }
         }
 
         // if all nodes have been assigned and set is valid, return dominating set
@@ -329,32 +328,32 @@ public class DominatingSet
 
     public static void main(String[] args)
     {   
-        Graph aaa = new Graph();
-        GraphLoader.loadGraph(aaa, "data/dominating_set_test.txt");
-        System.out.println(aaa.exportGraphString());
-        System.out.println(findMinimumDominatingSet(aaa));
-        System.out.println(findGreedyDominatingSet(aaa));
+        // Graph aaa = new Graph();
+        // GraphLoader.loadGraph(aaa, "data/dominating_set_test.txt");
+        // System.out.println(aaa.exportGraphString());
+        // System.out.println(findMinimumDominatingSet(aaa));
+        // System.out.println(findGreedyDominatingSet(aaa));
 
-        Graph bbb = new Graph();
-        GraphLoader.loadGraph(bbb, "data/dominating_set_test_2.txt");
-        System.out.println(bbb.exportGraphString());
-        System.out.println(findMinimumDominatingSet(bbb));
-        System.out.println(findGreedyDominatingSet(bbb));
+        // Graph bbb = new Graph();
+        // GraphLoader.loadGraph(bbb, "data/dominating_set_test_2.txt");
+        // System.out.println(bbb.exportGraphString());
+        // System.out.println(findMinimumDominatingSet(bbb));
+        // System.out.println(findGreedyDominatingSet(bbb));
 
-        Graph ccc = new Graph();
-        GraphLoader.loadGraph(ccc, "data/small_test_graph.txt");
-        System.out.println(ccc.exportGraphString());
-        System.out.println(findMinimumDominatingSet(ccc));
-        System.out.println(findGreedyDominatingSet(ccc));
+        // Graph ccc = new Graph();
+        // GraphLoader.loadGraph(ccc, "data/super_small_test.txt");
+        // System.out.println(ccc.exportGraphString());
+        // System.out.println(findMinimumDominatingSet(ccc));
+        // System.out.println(findGreedyDominatingSet(ccc));
 
-        Graph ddd = new Graph();
-        GraphLoader.loadGraph(ddd, "data/greedy_ds_test.txt");
-        System.out.println(ddd.exportGraphString());
-        System.out.println(findMinimumDominatingSet(ddd));
-        System.out.println(findGreedyDominatingSet(ddd));
+        // Graph ddd = new Graph();
+        // GraphLoader.loadGraph(ddd, "data/greedy_ds_test.txt");
+        // System.out.println(ddd.exportGraphString());
+        // System.out.println(findMinimumDominatingSet(ddd));
+        // System.out.println(findGreedyDominatingSet(ddd));
 
         Graph eee = new Graph();
-        GraphLoader.loadGraph(eee, "data/super_small_test.txt");
+        GraphLoader.loadGraph(eee, "data/small_test_graph.txt");
         System.out.println(eee.exportGraphString());
         System.out.println(findMinimumDominatingSet(eee));
         System.out.println(findGreedyDominatingSet(eee));
