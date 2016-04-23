@@ -4,6 +4,8 @@
  */
 package graph;
 import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Node
 {
@@ -33,9 +35,9 @@ public class Node
 	 * Get the neighbors of a node.
 	 * @return a HashSet of Nodes.
 	 */
-	public HashSet<Node> getNeighbors() 
+	public List<Node> getNeighbors() 
 	{
-		HashSet<Node> neighbors = new HashSet<Node>();
+		List<Node> neighbors = new ArrayList<Node>();
 		for (Edge edge : nodesEdges) {
 			neighbors.add(edge.getOtherNode(this));
 		}

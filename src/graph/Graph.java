@@ -142,7 +142,7 @@ public class Graph
 	 * @return A List of Nodes that contained in the Graph
 	 */
 	public List<Node> getNodes()
-	{	return new ArrayList<Node>(nodes.values());	}
+	{	return new ArrayList<Node>( nodes.values() );	}
 
 
     /** 
