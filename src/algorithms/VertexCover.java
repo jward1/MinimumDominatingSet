@@ -94,7 +94,7 @@ public class VertexCover
 	    // Make sure it is still possible to assign a valid vertex cover
 	    // That is, loop through all of the edges in the graph.
 	    // If there is one edge where both of its nodes have been assigned to "not in cover"
-	    // return largest int
+	    // return largest size graph
 		Node u = null;
 		Node v = null;
 
@@ -137,11 +137,58 @@ public class VertexCover
 		v.setIsCovered(-1);
 
 		// return smallest cover
-		if (vc01.size() <= vc10.size() && vc01.size() <= vc11.size() )		{ return vc01; }
+		if      (vc01.size() <= vc10.size() && vc01.size() <= vc11.size() )	{ return vc01; }
 		else if (vc10.size() <= vc01.size() && vc10.size() <= vc11.size() )	{ return vc10; }
 		else																{ return vc11; }
 
 	}
+
+	public static List<Node> recursiveTree(Graph graph)
+	{
+	    // Make sure it is still possible to assign a valid vertex cover
+	    // That is, loop through all of the edges in the graph.
+	    // If there is one edge where both of its nodes have been assigned to "not in cover"
+	    // return largest size graph
+		Node u = null;
+
+	    for (Node node: graph.getNodes() )
+	    {
+	    	if (node.isCovered() == -1)
+	    		u = node;
+
+	    	for (Edge edge : node.getEdges())
+	    	{
+	    		Node v2 = edge.getOtherNode(node);
+	    		if (v2.isCovered() == 0 && node.isCovered() == 0)
+	    			return (List<Node>) graph.getNodes();
+	    	}
+	    }
+
+		// If all vertices are assigned and cover is valid
+		if (u == null)
+		{
+			List<Node> vCover = new ArrayList<Node>();
+			for (Node node : graph.getNodes() )
+				if (node.isCovered() == 1)
+					vCover.add(node);
+			return vCover;
+		}
+
+		// recursive paths
+		u.setIsCovered(0);
+		List<Node> u0 = recursiveSmartTree(graph);
+		u.setIsCovered(1);
+		List<Node> u1 = recursiveSmartTree(graph);
+		u.setIsCovered(-1);
+
+		// return smallest cover
+		if (u0.size() < u1.size() )	{ return u0; }
+		else 						{ return u1; }
+
+	}
+
+
+
 
 	/**
 	 *
