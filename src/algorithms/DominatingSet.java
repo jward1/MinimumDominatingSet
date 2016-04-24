@@ -87,8 +87,12 @@ public class DominatingSet
         // if all are null, then graph only contains nodes with 
         // zero or three or more neighbors
         if (w1==null && u1==null && u2==null && v==null)
-        {
-            return bruteForce(graph);
+        {   
+            int numNodesAssigned = 0;
+            for (Node node : graph.getNodes())
+                if (node.isAssigned() == 1)  { numNodesAssigned++; }
+
+            return bruteForce(graph, graph.getNumNodes() - numNodesAssigned, numNodesAssigned);
         }
             
 
@@ -154,10 +158,11 @@ public class DominatingSet
      * @param graph The graph object for which a minimum dominating set is to be found.
      * @return A List of Nodes representing the nodes included in the dominating set.
      */
-    private static List<Node> bruteForce(Graph graph)
+    private static List<Node> bruteForce(Graph graph, int sizeOfSubgraph, int numAlreadyAssigned)
     {   
         
         Node u = null; 
+        int totalNumAssignedToOne = 0;
 
         // check if dominating set is possible, if not return full graph as dominating set
         for (Node node : graph.getNodes() )
@@ -178,12 +183,9 @@ public class DominatingSet
                     return (ArrayList<Node>) graph.getNodes();
                 }  
             }
-        }
-        
-        // if graph is possible, find unassigned node
-        for (Node node : graph.getNodes() )
-        {
-            if (node.isAssigned() == -1)
+            else if (node.isAssigned() == 1)
+                totalNumAssignedToOne++;
+            else
                 u = node;
         }
 
@@ -199,11 +201,16 @@ public class DominatingSet
             return ds;
         }
 
+        // stop searching if number of assigned nodes is greater than or equal
+        // to 3n/8
+        if (totalNumAssignedToOne - numAlreadyAssigned >= 3*sizeOfSubgraph/8)
+            return (ArrayList<Node>) graph.getNodes();
+
         // recursively iterate through all assignments of u
         u.setAssignment(0);
-        List<Node> u0 = bruteForce(graph);
+        List<Node> u0 = bruteForce(graph, sizeOfSubgraph, numAlreadyAssigned);
         u.setAssignment(1);
-        List<Node> u1 = bruteForce(graph);
+        List<Node> u1 = bruteForce(graph, sizeOfSubgraph, numAlreadyAssigned);
         u.setAssignment(-1);
 
         //return the smallest set
@@ -332,47 +339,21 @@ public class DominatingSet
 
     public static void main(String[] args)
     {   
-        Graph aaa = new Graph();
-        GraphLoader.loadGraph(aaa, "data/dominating_set_test.txt");
-        System.out.println(aaa.exportGraphString());
-        System.out.println(findMinimumDominatingSet(aaa));
-        System.out.println(findGreedyDominatingSet(aaa));
+        String filename = args[0];
 
-        Graph bbb = new Graph();
-        GraphLoader.loadGraph(bbb, "data/dominating_set_test_2.txt");
-        System.out.println(bbb.exportGraphString());
-        System.out.println(findMinimumDominatingSet(bbb));
-        System.out.println(findGreedyDominatingSet(bbb));
-
-        Graph ccc = new Graph();
-        GraphLoader.loadGraph(ccc, "data/super_small_test.txt");
-        System.out.println(ccc.exportGraphString());
-        System.out.println(findMinimumDominatingSet(ccc));
-        System.out.println(findGreedyDominatingSet(ccc));
-
-        Graph ddd = new Graph();
-        GraphLoader.loadGraph(ddd, "data/greedy_ds_test.txt");
-        System.out.println(ddd.exportGraphString());
-        System.out.println(findMinimumDominatingSet(ddd));
-        System.out.println(findGreedyDominatingSet(ddd));
-
-        Graph eee = new Graph();
-        GraphLoader.loadGraph(eee, "data/small_test_graph.txt");
-        System.out.println(eee.exportGraphString());
-        System.out.println("Minimum DS: " + findMinimumDominatingSet(eee));
-        System.out.println("Greedy DS: " + findGreedyDominatingSet(eee));
-
-        Graph fb = new Graph();
-        GraphLoader.loadGraph(fb, "data/facebook_2000.txt");
-        System.out.println("Number of Nodes: " + fb.getNumNodes());
+        Graph g = new Graph();
+        GraphLoader.loadGraph(g, filename);
+        System.out.println("\nAnalyzing " + filename + " ...");
+        System.out.println("Number of Nodes: " + g.getNumNodes());
+        System.out.println("Number of Edges: " + g.getNumEdges());
         
         System.out.println("\nGreedy Dominating Set ...");
-        List<Node> gds = findGreedyDominatingSet(fb);
+        List<Node> gds = findGreedyDominatingSet(g);
         System.out.println("Size of gds: " + gds.size() );
         System.out.println("Greedy dominating set: " + gds);
 
         System.out.println("\nMinimum Dominating Set ...");
-        List<Node> mds = findMinimumDominatingSet(fb);
+        List<Node> mds = findMinimumDominatingSet(g);
         System.out.println("Size of mds with tree: " + mds.size() );
         System.out.println("Minimum Dominating Set: " + mds);
     }

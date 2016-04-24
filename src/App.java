@@ -13,20 +13,34 @@ public class App
 		// System.out.println("Running tests ...");
 		// tests();
 
-		Graph fb = new Graph();
-		tools.GraphLoader.loadGraph(fb, "data/facebook_250.txt");
+		String filename = "data/fb_30.txt";
+
+		Graph g = new Graph();
+		tools.GraphLoader.loadGraph(g, filename);
 		
-  		System.out.println("The undirected facebook_250 graph has " + fb.getNumNodes() + " nodes.");
-		System.out.println("Undirected facebook_250 graph has " + fb.getNumEdges() + " edges.");
+		System.out.println("\nAnalyzing " + filename + " ...");
+  		System.out.println("The undirected facebook graph has " + g.getNumNodes() + " nodes.");
+		System.out.println("Undirected facebook graph has " + g.getNumEdges() + " edges.");
 
-		long start = System.currentTimeMillis();
-		List<Node> fbDominatingSet = DominatingSet.findMinimumDominatingSet(fb);
-		long end = System.currentTimeMillis();
+		long start_gds = System.currentTimeMillis();
+		List<Node> gds = DominatingSet.findGreedyDominatingSet(g);
+		long end_gds = System.currentTimeMillis();
 
-		double seconds = end/1000.0 - start/1000.0;
-		System.out.println("The program found a minimum dominating set in " + seconds + " seconds.");
-		System.out.println("The dominating set found is ...");
-		System.out.println(fbDominatingSet);
+		double seconds_gds = end_gds/1000.0 - start_gds/1000.0;
+		System.out.println("\nThe program found a greedy dominating set in " + seconds_gds + " seconds.");
+		System.out.println("The greedy dominating set found contains " + gds.size() + " nodes");
+		System.out.print("The greedy dominating set is : ");
+		System.out.println(gds);
+
+		long start_mds = System.currentTimeMillis();
+		List<Node> mds = DominatingSet.findMinimumDominatingSet(g);
+		long end_mds = System.currentTimeMillis();
+
+		double seconds_mds = end_mds/1000.0 - start_mds/1000.0;
+		System.out.println("\nThe program found a minimum dominating set in " + seconds_mds + " seconds.");
+		System.out.println("The minimum dominating set found contains " + mds.size() + " nodes.");
+		System.out.print("The minimum dominating set is: ");
+		System.out.println(mds);
 	}
 
 
@@ -67,7 +81,7 @@ public class App
 		// TEST 3
 		System.out.println("\n\nTest 3: ...");
 		Graph test3 = new Graph();
-		GraphLoader.loadGraph(test3, "data/dominating_set_test_2.txt");
+		GraphLoader.loadGraph(test3, "data/greedy_ds_test.txt");
 		System.out.println(test3.exportGraphString());
 
 		List<Node> dominatingSet3 = DominatingSet.findGreedyDominatingSet(test3);
@@ -77,6 +91,37 @@ public class App
 		List<Node> minDominatingSet3 = DominatingSet.findMinimumDominatingSet(test3);
 		System.out.print("Minimum DominatingSet: ");
 		System.out.println(minDominatingSet3);
+
+		// MORE TESTS!
+        // Graph aaa = new Graph();
+        // GraphLoader.loadGraph(aaa, "data/dominating_set_test.txt");
+        // System.out.println(aaa.exportGraphString());
+        // System.out.println(findMinimumDominatingSet(aaa));
+        // System.out.println(findGreedyDominatingSet(aaa));
+
+        // Graph bbb = new Graph();
+        // GraphLoader.loadGraph(bbb, "data/dominating_set_test_2.txt");
+        // System.out.println(bbb.exportGraphString());
+        // System.out.println(findMinimumDominatingSet(bbb));
+        // System.out.println(findGreedyDominatingSet(bbb));
+
+        // Graph ccc = new Graph();
+        // GraphLoader.loadGraph(ccc, "data/super_small_test.txt");
+        // System.out.println(ccc.exportGraphString());
+        // System.out.println(findMinimumDominatingSet(ccc));
+        // System.out.println(findGreedyDominatingSet(ccc));
+
+        // Graph ddd = new Graph();
+        // GraphLoader.loadGraph(ddd, "data/greedy_ds_test.txt");
+        // System.out.println(ddd.exportGraphString());
+        // System.out.println(findMinimumDominatingSet(ddd));
+        // System.out.println(findGreedyDominatingSet(ddd));
+
+        // Graph eee = new Graph();
+        // GraphLoader.loadGraph(eee, "data/small_test_graph.txt");
+        // System.out.println(eee.exportGraphString());
+        // System.out.println("Minimum DS: " + findMinimumDominatingSet(eee));
+        // System.out.println("Greedy DS: " + findGreedyDominatingSet(eee));
 
 	}
 }
