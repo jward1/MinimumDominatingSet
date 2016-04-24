@@ -14,10 +14,10 @@ public class App
 		// tests();
 
 		Graph fb = new Graph();
-		tools.GraphLoader.loadGraph(fb, "data/facebook_1000.txt");
+		tools.GraphLoader.loadGraph(fb, "data/facebook_250.txt");
 		
-  		System.out.println("The undirected facebook_1000 graph has " + fb.getNumNodes() + " nodes.");
-		System.out.println("Undirected facebook_1000 graph has " + fb.getNumEdges() + " edges.");
+  		System.out.println("The undirected facebook_250 graph has " + fb.getNumNodes() + " nodes.");
+		System.out.println("Undirected facebook_250 graph has " + fb.getNumEdges() + " edges.");
 
 		long start = System.currentTimeMillis();
 		List<Node> fbDominatingSet = DominatingSet.findMinimumDominatingSet(fb);
