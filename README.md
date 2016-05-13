@@ -1,2 +1,6 @@
-# Capstone Project
-Minimum Dominating Set
+# Minimum Dominating Set
+This project served as my Capstone project for the [Java Programming: Object-Oriented Design of Data Structures Specialization](https://www.coursera.org/specializations/java-object-oriented) by [Coursera.org](Coursera.org).
+
+For this project, I implemented two algorithms to solve the [Dominating Set problem](https://en.wikipedia.org/wiki/Dominating_set) for network data (represented by an undirected graph).
+* A greedy approximation algorithm: This algorithm returns an approximation for the Dominating Set. It finds the node in the graph with the largest number of neighbors and puts that node in the Dominating Set. It then finds the node with the second largest number of neighbors and puts that node in the dominating set. It continues in this manner until all nodes in the graph are neighbors with at least one node in the Dominating Set.
+* A search tree algorithm: This algorithm returns a Minimum Dominating Set for a small graph. This is an implementation of the algorithm discussed in "Exact (exponential) algorithms for the dominating set problem by Fomin, Kratsch, and Woeninger. This algorithm uses a "pruning the tree" approach to remove solutions that would not create a dominating set (as opposed to a brute force implementation which would tests these solutions). This algorithm runs in O(1.93782^n) where n is the number of nodes in the graph.
