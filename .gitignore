@@ -5,3 +5,7 @@
 writeups/
 data/
 old/
+references/
+*.mov
+*.mp4
+*.m4v
